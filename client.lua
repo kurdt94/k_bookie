@@ -428,10 +428,10 @@ Citizen.CreateThread(function ()
     end
 end)
 
-RegisterCommand("deletepeds", function(source, args, rawCommand) -- Its showing/hiding hud - just a dev command
-    TriggerServerEvent('k_bookie:getData')
-    Wait(500)
-    print("deleting peds")
-    DelPeds(Data["players"])
-    DelPeds(Data["bookies"])
-end, false)
+--RegisterCommand("deletepeds", function(source, args, rawCommand) -- just a dev command
+--    TriggerServerEvent('k_bookie:getData')
+--    Wait(500)
+--    print("deleting peds")
+--    DelPeds(Data["players"])
+--    DelPeds(Data["bookies"])
+--end, false)
