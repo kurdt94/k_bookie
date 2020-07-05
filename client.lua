@@ -10,8 +10,7 @@ local selection_amount = 10
 local isHosting = false
 Data = {}
 
----- [1] INIT Client Loop
--- FIRST ENTRY for Client
+-- INIT Client
 Citizen.CreateThread(function()
     while true do
         --print("I AM HOST ? : : " .. Citizen.InvokeNative(0x8DB296B814EDDA07))
@@ -25,8 +24,7 @@ Citizen.CreateThread(function()
     end
 end)
 
----- [2] INIT Client
---- Populate Data
+-- Populate Data
 RegisterNetEvent('clientData')
 AddEventHandler('clientData', function(_data)
     print("[k_bookie]: data received > " .. type(_data))
@@ -36,7 +34,6 @@ AddEventHandler('clientData', function(_data)
     end
 end)
 
--- NOT WORKING ? ?
 RegisterNetEvent('clientPayout')
 AddEventHandler('clientPayout', function(payout,amount,winner)
     print("You won " .. payout .. " with: $ " .. amount .. " @ " .. Config.players[winner].fake_name )
@@ -61,7 +58,6 @@ AddEventHandler('clientSpawned', function(_spawned)
     spawned = _spawned
 end)
 
----- INIT
 Citizen.CreateThread(function()
     while true do
         Wait(1)
@@ -408,7 +404,6 @@ Citizen.CreateThread(function ()
         end
         if  Data["bets"]["pot"] >= Config.max_pot then
             active = true
-            --print("Fight Active!")
         end
         if active then
             for k,v in pairs(Data["players"]) do
