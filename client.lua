@@ -19,7 +19,6 @@ Citizen.CreateThread(function()
             TriggerServerEvent('k_bookie:setHost', Citizen.InvokeNative(0x8DB296B814EDDA07))
         else
             --print(Data["test"])
-            --print(Data["bets"]["pot"])
         end
     end
 end)
