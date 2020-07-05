@@ -1,7 +1,7 @@
 # k_bookie
 REDM : Bet on fights in the town of Valentine
 
-This is the first "working" , but mostly untested version. I'm not sure if I will continue this script.
+This is the first working, but still untested version. I'm not sure if I will continue this script.
 
 # Installation
 - Add k_bookie to your server RESOURCES
