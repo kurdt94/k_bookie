@@ -4,7 +4,7 @@ REDM : Bet on fights in the town of Valentine
 - Bet on fist-fights between 441 different MALE models.
 
 # screenshot
-[![20200707235417-1.jpg](https://i.postimg.cc/tgxHM44K/20200707235417-1.jpg)](https://postimg.cc/p9R79x8C)
+[![20200707235417-1.jpg](https://i.postimg.cc/SxX0nxCn/20200707235417-1.jpg)]
 
 # The config.lua file lets you change:
 - Step ( how much your bet increments )
