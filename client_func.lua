@@ -11,6 +11,14 @@ function round(num, numDecimalPlaces)
     return math.floor(num * mult + 0.5) / mult
 end
 
+-- TABLE.LENGHT
+function tablelength(T)
+    local count = 0
+    for _ in pairs(T) do count = count + 1 end
+    return count
+end
+
+
 -- DRAW TEXT FUNCTION
 function DrawText(x,y,text)
     SetTextScale(0.35,0.35)

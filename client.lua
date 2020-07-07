@@ -5,25 +5,31 @@ local fighting = false
 local fightended = false
 local bettingactive = false
 local winner = false
+local namechange = false
 local selection = math.random(1,2)
 local selection_amount = 10
-local isHosting = false
+--local isHosting = false {unused}
+local distance_to_bookie = 999
+local cnt_namedlist = tablelength(Config.named_ped_list)
 Data = {}
 
--- INIT Client
+---- [1] INIT Client Loop
+-- FIRST ENTRY for Client
 Citizen.CreateThread(function()
     while true do
         --print("I AM HOST ? : : " .. Citizen.InvokeNative(0x8DB296B814EDDA07))
-        Wait(2000)
+        Wait(20000)
         if not client_init then
             TriggerServerEvent('k_bookie:setHost', Citizen.InvokeNative(0x8DB296B814EDDA07))
         else
             --print(Data["test"])
+            --print(Data["bets"]["pot"])
         end
     end
 end)
 
--- Populate Data
+---- [2] INIT Client
+--- Populate Data
 RegisterNetEvent('clientData')
 AddEventHandler('clientData', function(_data)
     print("[k_bookie]: data received > " .. type(_data))
@@ -33,6 +39,7 @@ AddEventHandler('clientData', function(_data)
     end
 end)
 
+-- NOT WORKING ? ?
 RegisterNetEvent('clientPayout')
 AddEventHandler('clientPayout', function(payout,amount,winner)
     print("You won " .. payout .. " with: $ " .. amount .. " @ " .. Config.players[winner].fake_name )
@@ -41,10 +48,24 @@ end)
 
 RegisterNetEvent('respawnPlayers')
 AddEventHandler('respawnPlayers', function()
-    print('Trigger Respawn!')
     if Data["host"] ~= false and Data["host"] == GetPlayerServerId() then
+        local ped_1 = Config.named_ped_list[math.random(1,cnt_namedlist)]
+        local ped_2 = Config.named_ped_list[math.random(1,cnt_namedlist)]
+
+        Config.players[1].model = ped_1.model
+        Config.players[1].fake_name = ped_1.name
+        Config.players[2].model = ped_2.model
+        Config.players[2].fake_name = ped_2.name
+
+        Data.players[1].model = ped_1.model
+        Data.players[1].fake_name = ped_1.name
+        Data.players[2].model = ped_2.model
+        Data.players[2].fake_name = ped_2.name
+
+
         SpawnPeds(Config.players,true)
         bettingactive = true
+        namechange = true
         TriggerServerEvent('k_bookie:setSpawned',true)
     end
     Wait(2000)
@@ -57,6 +78,7 @@ AddEventHandler('clientSpawned', function(_spawned)
     spawned = _spawned
 end)
 
+---- INIT
 Citizen.CreateThread(function()
     while true do
         Wait(1)
@@ -97,6 +119,13 @@ function SpawnPeds(peds,isPlayerPed)
             Citizen.InvokeNative(0x283978A15512B2FE, new_ped, true) -- _SET_RANDOM_OUTFIT_VARIATION [MANDATORY]
             FreezeEntityPosition(new_ped, true)
             TaskStandStill(new_ped, -1)
+
+            -- Remove Weapons
+            while Citizen.InvokeNative(0x8483E98E8B888AE2,new_ped,true,true) ~= -1569615261 do
+                local bestweapon = Citizen.InvokeNative(0x8483E98E8B888AE2,new_ped,true,true)
+                print("removed weapon:"..bestweapon.." from "..new_ped)
+                Citizen.InvokeNative(0x4899CB088EDF59B8, new_ped, bestweapon, true, false)
+            end
 
             if isPlayerPed then
                 Data["players"][k].ped = new_ped
@@ -195,6 +224,7 @@ Citizen.CreateThread(function()
         Wait(0)
         local pedCoords = GetEntityCoords(PlayerPedId())
         local dist = Vdist(pedCoords.x, pedCoords.y, pedCoords.z, Config.bookies[1].pos.X, Config.bookies[1].pos.Y, Config.bookies[1].pos.Z)
+        distance_to_bookie = dist
         if dist < 2.0 and not active and not fighting and not fightended and bettingactive then
             _prompt_group_name = Config.prompt_group_name .. " ( pot: $ " .. Data["bets"]["pot"] .. " ) "
             local FightersGroupName  = CreateVarString(10, 'LITERAL_STRING', _prompt_group_name)
@@ -250,7 +280,7 @@ Citizen.CreateThread(function()
                     FightersBetPrompt()
 
                 end
-                if IsControlJustReleased(0, Config.select_control) then
+                if IsControlJustReleased(0, Config.select_control) or IsControlJustReleased(0, Config.select_control_two) then
                     --Wait(100)
                     if selection == 1 then selection = 2 else
                         selection = 1
@@ -260,6 +290,11 @@ Citizen.CreateThread(function()
                 end
             else
                 active = false
+            end
+            if namechange then
+                PromptDelete(FightersNameprompt)
+                FightersNamePrompt()
+                namechange = false
             end
             if active then
                 for k,v in pairs(Data["players"]) do
@@ -281,7 +316,8 @@ Citizen.CreateThread(function()
     while true do
         Wait(1)
         if client_spawned then
-        if Config.show_bookie_pot then
+
+        if Config.show_bookie_pot and distance_to_bookie < 20 then
             local bookie = Config.bookies[1].pos
             DrawText3D(bookie.X, bookie.Y, bookie.Z+1, "POT : " .. Data["bets"]["pot"] .. " / " .. Config.max_pot )
         end
@@ -307,11 +343,11 @@ Citizen.CreateThread(function()
             local posb = GetEntityCoords(p2)
             local deadb = tostring(IsEntityDead(p2))
 
-            if Config.show_names then
+            if Config.show_names and distance_to_bookie < 20 then
                 DrawText3D(posa.x+0, posa.y,posa.z-1, Data["players"][1].fake_name)
                 DrawText3D(posb.x+0, posb.y,posb.z-1, Data["players"][2].fake_name)
             end
-            if Config.debugger then
+            if Config.debugger and distance_to_bookie < 20 then
                 DrawText3D(posa.x, posa.y,posa.z-0.2,"PED A".. "\n" ..  Data["players"][1].ped .. "\n" .. GetEntityHealth(Data["players"][1].ped) .. "\n" .. tostring(deada) )
                 DrawText3D(posb.x,posb.y,posb.z-0.2,"PED B".. "\n" ..  Data["players"][2].ped .. "\n" .. GetEntityHealth(Data["players"][2].ped) .. "\n" .. tostring(deadb) )
             end
@@ -371,8 +407,8 @@ end
 -- Place Random [FAKE] bets
 Citizen.CreateThread(function ()
     while true do
-        Wait(1000)
-        if Citizen.InvokeNative(0x8DB296B814EDDA07) == 1 and client_spawned and Config.fake_bets then
+        Wait(1)
+        if Citizen.InvokeNative(0x8DB296B814EDDA07) == 1 and client_spawned and Config.fake_bets and not fighting and not fightended then
         local randomW = math.random(15000,20000)
         Wait(randomW)
         if not active and not fighting and not fightended then
@@ -386,7 +422,6 @@ Citizen.CreateThread(function ()
                 current_amount = Data["bets"]["players"]['x'..fake_better].amount
             else
                 current_amount = 0
-
                 Data["bets"]["players"]['x'..fake_better] = {amount = 0, winner = fake_winner, playerid = fake_better, serverid = false }
             end
 
@@ -403,6 +438,7 @@ Citizen.CreateThread(function ()
         end
         if  Data["bets"]["pot"] >= Config.max_pot then
             active = true
+            --print("Fight Active!")
         end
         if active then
             for k,v in pairs(Data["players"]) do
@@ -422,10 +458,48 @@ Citizen.CreateThread(function ()
     end
 end)
 
---RegisterCommand("deletepeds", function(source, args, rawCommand) -- just a dev command
---    TriggerServerEvent('k_bookie:getData')
---    Wait(500)
---    print("deleting peds")
---    DelPeds(Data["players"])
---    DelPeds(Data["bookies"])
---end, false)
+-- just a dev command
+RegisterCommand("deletepeds", function(source, args, rawCommand)
+    TriggerServerEvent('k_bookie:getData')
+    Wait(500)
+    print("deleting peds")
+    DelPeds(Data["players"])
+    DelPeds(Data["bookies"])
+end, false)
+
+RegisterCommand("killped", function(source, args, rawCommand)
+local pedtokill = args[1]
+
+local targetped = Data["players"][tonumber(pedtokill)].ped
+print(targetped)
+    Citizen.InvokeNative(0xAC2767ED8BDFAB15,targetped,0,0)
+end, false)
+
+RegisterCommand("ptest", function(source, args, rawCommand)
+    local target = args[1]
+    local targetped = Data["players"][tonumber(target)].ped
+
+    local bestweapon = Citizen.InvokeNative(0x8483E98E8B888AE2,targetped,true,true)
+
+    print(bestweapon)
+
+    Citizen.InvokeNative(0x4899CB088EDF59B8, targetped, bestweapon, true, false) -- remove weapon
+
+end, false)
+
+
+RegisterCommand("scam", function(source, args, rawCommand)
+    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -244.80, 674.26 , 115.37, 200.00 , 0.00 , 0.00 , 100.00 , false, 0) -- CAMERA COORDS
+
+    SetCamActive(cam, true)
+    RenderScriptCams(true, false, 1, true, true)
+    DoScreenFadeIn(500)
+
+end, false)
+
+RegisterCommand("ecam", function(source, args, rawCommand)
+    SetCamActive(cam, false)
+    DestroyCam(cam, true)
+end, false)
+
+
