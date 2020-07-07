@@ -56,7 +56,7 @@ Config.bookies = {
     },
 }
 
--- NO FEMALES | NO TEENS | NO LAW | NO DEAD | NO RICH PEOPLE | NO STORE OWNERS
+-- NO FEMALES | NO TEENS | NO LAW | NO DEAD | NO RICH PEOPLE | NO STORE OWNERS | NO NAKED GUYS
 -- Most of these names are generated, and do not resemble Rockstar names
 Config.named_ped_list = {
     {name="Henry Donnell",model="CS_forgivenhusband_01"},
@@ -91,11 +91,9 @@ Config.named_ped_list = {
     {name="Jules Prioleau",model="CS_Jules"},
     {name="John Karen",model="CS_KarensJohn_01"},
     {name="Kieran Duffy",model="CS_kieran"},
-    {name="Leigh Gray",model="CS_leighgray"},
     {name="Leon Fuentes",model="CS_leon"},
     {name="Levi Simon",model="CS_LeviSimon"},
     {name="Leviticus cornwall",model="CS_leviticuscornwall"},
-    {name="Jacob Londonderry",model="CS_LondonderrySon"},
     {name="Monk",model="CS_MEDITATINGMONK"},
     {name="Milton andrews",model="CS_miltonandrews"},
     {name="Alfredo Montez",model="CS_MP_ALFREDO_MONTEZ"},
@@ -264,7 +262,6 @@ Config.named_ped_list = {
     {name="Virgil Doolin",model="RE_MOONSHINECAMP_MALES_01"},
     {name="Steve Price",model="RE_MURDERCAMP_MALES_01"},
     {name="Allen Ward",model="RE_MURDERSUICIDE_MALES_01"},
-    {name="Thomas Jenkins",model="RE_NAKEDSWIMMER_MALES_01"},
     {name="Elijah Green",model="RE_ONTHERUN_MALES_01"},
     {name="Patrick Jones",model="RE_OUTLAWLOOTER_MALES_01"},
     {name="Tom Ross",model="RE_PARLORAMBUSH_MALES_01"},
