@@ -17,13 +17,9 @@ Data = {}
 -- FIRST ENTRY for Client
 Citizen.CreateThread(function()
     while true do
-        --print("I AM HOST ? : : " .. Citizen.InvokeNative(0x8DB296B814EDDA07))
         Wait(20000)
         if not client_init then
             TriggerServerEvent('k_bookie:setHost', Citizen.InvokeNative(0x8DB296B814EDDA07))
-        else
-            --print(Data["test"])
-            --print(Data["bets"]["pot"])
         end
     end
 end)
@@ -32,7 +28,7 @@ end)
 --- Populate Data
 RegisterNetEvent('clientData')
 AddEventHandler('clientData', function(_data)
-    print("[k_bookie]: data received > " .. type(_data))
+    -- print("data received > " .. type(_data))
     if type(_data) == 'table' then
         Data = _data
         client_init = true
@@ -120,10 +116,9 @@ function SpawnPeds(peds,isPlayerPed)
             FreezeEntityPosition(new_ped, true)
             TaskStandStill(new_ped, -1)
 
-            -- Remove Weapons
+            -- Remove Weapon from ped until WEAPON_UNARMED is bestweapon
             while Citizen.InvokeNative(0x8483E98E8B888AE2,new_ped,true,true) ~= -1569615261 do
                 local bestweapon = Citizen.InvokeNative(0x8483E98E8B888AE2,new_ped,true,true)
-                print("removed weapon:"..bestweapon.." from "..new_ped)
                 Citizen.InvokeNative(0x4899CB088EDF59B8, new_ped, bestweapon, true, false)
             end
 
@@ -154,11 +149,9 @@ end
 --- Delete Peds or Bookies
 function DelPeds(peds)
     if type(peds) == 'table' then
-
         for k,v in pairs(peds) do
             DeletePed(v.ped)
         end
-
     else
         print("peds is not a table in DelPeds()")
     end
@@ -249,13 +242,13 @@ Citizen.CreateThread(function()
                     Data["bets"]["players"][PlayerPedId()].playerid = _playerpedid
                     Data["bets"]["players"][PlayerPedId()].serverid = _playerserverid
 
-                    print(Data["bets"]["pot"])
+                    --print(Data["bets"]["pot"])
 
                     if  Data["bets"]["pot"] >= Config.max_pot then
                         active = true
                     end
                     TriggerServerEvent('k_bookie:setData', Data)
-                    print("Your bet: " .. selection_amount .. " on " .. Data["players"][selection].fake_name .. " !")
+                    print("You bet: " .. selection_amount .. " on " .. Data["players"][selection].fake_name .. " !")
                     TriggerServerEvent('k_bookie:removeCash', selection_amount)
                     bettingactive = false
                 end
@@ -376,7 +369,7 @@ Citizen.CreateThread(function ()
         Wait(1000)
         if Citizen.InvokeNative(0x8DB296B814EDDA07) == 1 and Data["host"] == GetPlayerServerId() then
             if fightended then
-                print("FightEnded : winner  = " .. Data["players"][winner].fake_name)
+                print("End of Fight: Winner is > " .. Data["players"][winner].fake_name)
                 Wait(Config.time_till_next_match)
                 DelPeds(Data["players"])
                 Payout(winner)
@@ -430,8 +423,7 @@ Citizen.CreateThread(function ()
             Data["bets"]["players"]['x'..fake_better].winner = fake_winner
             Data["bets"]["players"]['x'..fake_better].playerid = fake_better
             Data["bets"]["players"]['x'..fake_better].serverid = false
-
-
+            
             Data["bets"][fake_winner] = tonumber(Data["bets"][fake_winner] + fake_amount)
             Data["bets"]["pot"] = Data["bets"][1] + Data["bets"][2]
             TriggerServerEvent('k_bookie:setData',Data)
