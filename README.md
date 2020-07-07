@@ -1,7 +1,7 @@
 # k_bookie
 REDM : Bet on fights in the town of Valentine
 
-- Bet on fist-fights between 441 different MALE models.
+- Bet on fist-fights between 300+ different MALE models.
 
 # screenshot
 ![20200707235417-1.jpg](https://i.postimg.cc/SxX0nxCn/20200707235417-1.jpg)
