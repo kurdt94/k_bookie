@@ -310,6 +310,16 @@ Citizen.CreateThread(function()
         Wait(1)
         if client_spawned then
 
+        local p1 = Data["players"][1].ped
+        local p2 = Data["players"][2].ped
+        local posa = GetEntityCoords(p1)
+        local posb = GetEntityCoords(p2)
+
+        if Config.show_names and distance_to_bookie < 20 then
+            DrawText3D(posa.x+0, posa.y,posa.z-1, Data["players"][1].fake_name)
+            DrawText3D(posb.x+0, posb.y,posb.z-1, Data["players"][2].fake_name)
+        end
+
         if Config.show_bookie_pot and distance_to_bookie < 20 then
             local bookie = Config.bookies[1].pos
             DrawText3D(bookie.X, bookie.Y, bookie.Z+1, "POT : " .. Data["bets"]["pot"] .. " / " .. Config.max_pot )
@@ -326,21 +336,14 @@ Citizen.CreateThread(function()
             DrawText(0.75,0.66, "TOTAL POT: "..tostring(Data["bets"]["pot"]))
         end
 
-        local p1 = Data["players"][1].ped
-        local p2 = Data["players"][2].ped
+
 
         if client_spawned and fighting then
-            local posa = GetEntityCoords(p1)
             local deada = tostring(IsEntityDead(p1))
-
-            local posb = GetEntityCoords(p2)
             local deadb = tostring(IsEntityDead(p2))
 
-            if Config.show_names and distance_to_bookie < 20 then
-                DrawText3D(posa.x+0, posa.y,posa.z-1, Data["players"][1].fake_name)
-                DrawText3D(posb.x+0, posb.y,posb.z-1, Data["players"][2].fake_name)
-            end
             if Config.debugger and distance_to_bookie < 20 then
+
                 DrawText3D(posa.x, posa.y,posa.z-0.2,"PED A".. "\n" ..  Data["players"][1].ped .. "\n" .. GetEntityHealth(Data["players"][1].ped) .. "\n" .. tostring(deada) )
                 DrawText3D(posb.x,posb.y,posb.z-0.2,"PED B".. "\n" ..  Data["players"][2].ped .. "\n" .. GetEntityHealth(Data["players"][2].ped) .. "\n" .. tostring(deadb) )
             end
@@ -423,7 +426,7 @@ Citizen.CreateThread(function ()
             Data["bets"]["players"]['x'..fake_better].winner = fake_winner
             Data["bets"]["players"]['x'..fake_better].playerid = fake_better
             Data["bets"]["players"]['x'..fake_better].serverid = false
-            
+
             Data["bets"][fake_winner] = tonumber(Data["bets"][fake_winner] + fake_amount)
             Data["bets"]["pot"] = Data["bets"][1] + Data["bets"][2]
             TriggerServerEvent('k_bookie:setData',Data)
@@ -453,21 +456,21 @@ end)
 -- DEV COMMANDS
 
 --- DELPEDS ( NO ARGS NEEDED , DELETES PEDS )
---RegisterCommand("delpeds", function(source, args, rawCommand)
---    TriggerServerEvent('k_bookie:getData')
---    Wait(500)
---    print("deleting peds")
---    DelPeds(Data["players"])
---    DelPeds(Data["bookies"])
---end, false)
+RegisterCommand("delpeds", function(source, args, rawCommand)
+    TriggerServerEvent('k_bookie:getData')
+    Wait(500)
+    print("deleting peds")
+    DelPeds(Data["players"])
+    DelPeds(Data["bookies"])
+end, false)
 
 --- KILLPED ( arg[1] == 1 or 2 ) to kill a player ped
---RegisterCommand("killped", function(source, args, rawCommand)
---    local pedtokill = args[1]
---    local targetped = Data["players"][tonumber(pedtokill)].ped
---    print(targetped)
---    Citizen.InvokeNative(0xAC2767ED8BDFAB15,targetped,0,0)
---end, false)
+RegisterCommand("killped", function(source, args, rawCommand)
+    local pedtokill = args[1]
+    local targetped = Data["players"][tonumber(pedtokill)].ped
+    print(targetped)
+    Citizen.InvokeNative(0xAC2767ED8BDFAB15,targetped,0,0)
+end, false)
 
 
 
