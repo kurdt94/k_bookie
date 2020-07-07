@@ -1,16 +1,14 @@
 -------------------
----Bookie  v1.B0---
+---Bookie  v1.10---
 ---GLOBAL CONFIG---
 -------------------
----
-
 Config = {}
 
 Config.max_pot = 35
 Config.min_bet = 10
 Config.max_bet = 150
 Config.step = 10
-Config.time_till_next_match = 30000 -- Ms {30sec}
+Config.time_till_next_match = 60000 -- Ms {1 min}
 Config.prompt_group_name = "Bookie" --Main Prompt Group Name
 Config.start_control = 0xC7B5340A -- [ENTER]
 Config.start_control_name = "Place Bet" --Place Bet
@@ -44,7 +42,7 @@ Config.players = {
         max_health = 200,
     },
 }
---- One (or more) Bookies
+--- Max 1 Bookie
 Config.bookies = {
     [1] = {
         ped = nil,

@@ -458,48 +458,27 @@ Citizen.CreateThread(function ()
     end
 end)
 
--- just a dev command
-RegisterCommand("deletepeds", function(source, args, rawCommand)
-    TriggerServerEvent('k_bookie:getData')
-    Wait(500)
-    print("deleting peds")
-    DelPeds(Data["players"])
-    DelPeds(Data["bookies"])
-end, false)
+-- DEV COMMANDS
 
-RegisterCommand("killped", function(source, args, rawCommand)
-local pedtokill = args[1]
+--- DELPEDS ( NO ARGS NEEDED , DELETES PEDS )
+--RegisterCommand("delpeds", function(source, args, rawCommand)
+--    TriggerServerEvent('k_bookie:getData')
+--    Wait(500)
+--    print("deleting peds")
+--    DelPeds(Data["players"])
+--    DelPeds(Data["bookies"])
+--end, false)
 
-local targetped = Data["players"][tonumber(pedtokill)].ped
-print(targetped)
-    Citizen.InvokeNative(0xAC2767ED8BDFAB15,targetped,0,0)
-end, false)
-
-RegisterCommand("ptest", function(source, args, rawCommand)
-    local target = args[1]
-    local targetped = Data["players"][tonumber(target)].ped
-
-    local bestweapon = Citizen.InvokeNative(0x8483E98E8B888AE2,targetped,true,true)
-
-    print(bestweapon)
-
-    Citizen.InvokeNative(0x4899CB088EDF59B8, targetped, bestweapon, true, false) -- remove weapon
-
-end, false)
+--- KILLPED ( arg[1] == 1 or 2 ) to kill a player ped
+--RegisterCommand("killped", function(source, args, rawCommand)
+--    local pedtokill = args[1]
+--    local targetped = Data["players"][tonumber(pedtokill)].ped
+--    print(targetped)
+--    Citizen.InvokeNative(0xAC2767ED8BDFAB15,targetped,0,0)
+--end, false)
 
 
-RegisterCommand("scam", function(source, args, rawCommand)
-    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -244.80, 674.26 , 115.37, 200.00 , 0.00 , 0.00 , 100.00 , false, 0) -- CAMERA COORDS
 
-    SetCamActive(cam, true)
-    RenderScriptCams(true, false, 1, true, true)
-    DoScreenFadeIn(500)
 
-end, false)
-
-RegisterCommand("ecam", function(source, args, rawCommand)
-    SetCamActive(cam, false)
-    DestroyCam(cam, true)
-end, false)
 
 
