@@ -18,6 +18,7 @@ REDM : Bet on fights in the town of Valentine
 # Debugging
 - Enable a debugger in the config file
 - At the bottom of the client.lua you can uncomment some usefull functions
+- note : It is safe to remove lines from the model list
 
 # Notes
 - Mostly untested ( if you find any bugs , let me know )
