@@ -299,7 +299,7 @@ Citizen.CreateThread(function()
         local posa = GetEntityCoords(p1)
         local posb = GetEntityCoords(p2)
 
-        if Config.show_names and distance_to_bookie < 20 then
+        if Config.show_names and distance_to_bookie < 20 and client_spawned then
             DrawText3D(posa.x+0, posa.y,posa.z-1, Data["players"][1].fake_name)
             DrawText3D(posb.x+0, posb.y,posb.z-1, Data["players"][2].fake_name)
         end
