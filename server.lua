@@ -25,18 +25,31 @@ AddEventHandler('k_bookie:setHost', function(host)
     _source = source
     _host = host
     if _host == 1 then
-        print(('[k_bookie] Host == %s on id # %i'):format(host, _source)) -- Host found
+        print(('Host == %s on id # %i'):format(host, _source)) -- Host found
         server_data['host'] = source
         server_data['source'] = source
-        -- Return Data
         TriggerClientEvent('clientData',source, server_data)
     else
-        print(('[k_bookie] Host == %s on id # %i'):format(host, _source)) -- Not the host
+        print(('Host == %s on id # %i'):format(host, _source)) -- Not the host
         data['source'] = source
         TriggerClientEvent('clientData',source, server_data)
     end
 end)
 
+RegisterNetEvent('k_bookie:setBet')
+AddEventHandler('k_bookie:setBet', function(bet)
+    _source = source
+    local user_cash = 0
+    TriggerEvent("redemrp:getPlayerFromId",_source,function(user)
+        user_cash = user.getMoney()
+    end)
+    if user_cash > bet then
+        TriggerClientEvent('clientPlaceBet',_source)
+    else
+        TriggerClientEvent('clientAlert',source,'not enough money')
+    end
+
+end)
 
 RegisterNetEvent('k_bookie:fightOver')
 AddEventHandler('k_bookie:fightOver', function(matchwinner)
@@ -54,19 +67,19 @@ AddEventHandler('k_bookie:fightOver', function(matchwinner)
                 local _bets = tonumber(server_data["bets"][_win])
                 local _pot = tonumber(server_data["bets"]["pot"])
 
-                -- print(_win, v.winner,_amn,_bets,_pot,v.serverid,v.playerid)
+                print(_win, v.winner,_amn,_bets,_pot,v.serverid,v.playerid)
                 if tonumber(v.winner) == _win then
                     local _perc = ( _amn / _bets ) * 100
                     local _win_amount = round((_perc * 1.00) * ( _pot / 100 ),2)
                     TriggerClientEvent('clientPayout',v.serverid, _win_amount, v.amount, v.winner)
                 else
                     -- Lost Bet @TODO
+
                     --TriggerClientEvent('clientLost',v.serverid, _win_amount)
                 end
             end
         end
     end
-
     TriggerClientEvent('respawnPlayers',_source)
 
 end)
