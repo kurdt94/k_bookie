@@ -54,10 +54,9 @@ end)
 RegisterNetEvent('k_bookie:fightOver')
 AddEventHandler('k_bookie:fightOver', function(matchwinner)
     _source = source
-    _winner = matchwinner
+    _winner = tonumber(matchwinner)
 
     if server_data["host"] == _source then
-        -- Use -1 for "targetPlayer" if you want the event to trigger on all connected clients.
         for k,v in pairs(server_data["bets"]["players"]) do
 
             if v.serverid ~= false then
@@ -74,8 +73,6 @@ AddEventHandler('k_bookie:fightOver', function(matchwinner)
                     TriggerClientEvent('clientPayout',v.serverid, _win_amount, v.amount, v.winner)
                 else
                     -- Lost Bet @TODO
-
-                    --TriggerClientEvent('clientLost',v.serverid, _win_amount)
                 end
             end
         end

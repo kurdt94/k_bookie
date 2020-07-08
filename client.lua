@@ -42,7 +42,7 @@ end)
 
 RegisterNetEvent('respawnPlayers')
 AddEventHandler('respawnPlayers', function()
-    print("Respawn Bookie Players")
+    --print("Respawn Bookie Players")
     if Data["host"] ~= false and Data["host"] == GetPlayerServerId() then
         local ped_1 = Config.named_ped_list[math.random(1,cnt_namedlist)]
         local ped_2 = Config.named_ped_list[math.random(1,cnt_namedlist)]
@@ -370,7 +370,6 @@ function resetBets()
     Data["bets"]["players"] = { }
     bettingactive = true
     winner = false
-    print("client: Reset Bets called SetData")
     TriggerServerEvent('k_bookie:setData',Data)
 end
 
