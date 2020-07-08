@@ -456,24 +456,18 @@ end)
 -- DEV COMMANDS
 
 --- DELPEDS ( NO ARGS NEEDED , DELETES PEDS )
-RegisterCommand("delpeds", function(source, args, rawCommand)
-    TriggerServerEvent('k_bookie:getData')
-    Wait(500)
-    print("deleting peds")
-    DelPeds(Data["players"])
-    DelPeds(Data["bookies"])
-end, false)
+--RegisterCommand("delpeds", function(source, args, rawCommand)
+--    TriggerServerEvent('k_bookie:getData')
+--    Wait(500)
+--    print("deleting peds")
+--    DelPeds(Data["players"])
+--    DelPeds(Data["bookies"])
+--end, false)
 
 --- KILLPED ( arg[1] == 1 or 2 ) to kill a player ped
-RegisterCommand("killped", function(source, args, rawCommand)
-    local pedtokill = args[1]
-    local targetped = Data["players"][tonumber(pedtokill)].ped
-    print(targetped)
-    Citizen.InvokeNative(0xAC2767ED8BDFAB15,targetped,0,0)
-end, false)
-
-
-
-
-
-
+--RegisterCommand("killped", function(source, args, rawCommand)
+--    local pedtokill = args[1]
+--    local targetped = Data["players"][tonumber(pedtokill)].ped
+--    print(targetped)
+--    Citizen.InvokeNative(0xAC2767ED8BDFAB15,targetped,0,0)
+--end, false)
