@@ -25,5 +25,3 @@ REDM : Bet on fights in the town of Valentine
 
 # Notes
 - Mostly untested ( if you find any bugs , let me know )
-- You can go negative cash ( no check has been implemented yet )
-
