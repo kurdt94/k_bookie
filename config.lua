@@ -482,7 +482,6 @@ Config.named_ped_list = {
     {name="Samuel Rogers",model="U_M_Y_CzPHomesteadSon_03"},
     {name="Franklin Griffin",model="U_M_Y_CZPHOMESTEADSON_04"},
     {name="Victor Hayes",model="U_M_Y_CZPHOMESTEADSON_05"},
-    {name="Edward Hill",model="U_M_Y_DuelListBounty_01"}, -- would not fight Kenneth Cox
     {name="Charlie Jenkins",model="U_M_Y_EmRSon_01"},
     {name="Harvey Flores",model="U_M_Y_HtlWorker_01"},
     {name="Phillip Lewis",model="U_M_Y_HtlWorker_02"},
