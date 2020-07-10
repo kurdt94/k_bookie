@@ -21,7 +21,7 @@ Data = {}
 Citizen.CreateThread(function()
         Wait(20000)
         if not client_init then
-            print("client [all] > server : INIT")
+            print("client INIT")
             TriggerServerEvent('k_bookie:setHost', Citizen.InvokeNative(0x8DB296B814EDDA07))
         end
 end)
@@ -80,11 +80,11 @@ AddEventHandler('respawnPlayers', function()
         SpawnPeds(Config.players,true)
         bettingactive = true
         namechange = true --this is for resetting the PromptMenu
-        print("client [host] > server : k_bookie:setSpawned")
+        --print("client [host] > server : k_bookie:setSpawned")
         TriggerServerEvent('k_bookie:setSpawned',true)
     end
     --Wait(2000)
-    print("client [all] > server : k_bookie:setData")
+    --print("client [all] > server : k_bookie:setData")
     TriggerServerEvent('k_bookie:setData',Data)
 end)
 
@@ -100,7 +100,7 @@ Citizen.CreateThread(function()
         -- do we need to spawn ?
         if client_init and not client_spawned then
             if Data["host"] ~= false and Data["host"] == GetPlayerServerId() then
-                print("client [host] > SpawnPeds")
+               -- print("client [host] > SpawnPeds")
                 SpawnPeds(Data["players"],true)
                 SpawnPeds(Data["bookies"],false)
                 bettingactive = true
@@ -333,7 +333,6 @@ Citizen.CreateThread(function()
         if Config.show_names and distance_to_bookie < 20 and client_spawned then
             DrawText3D(posa.x+0, posa.y,posa.z-1, Data["players"][1].fake_name)
             DrawText3D(posb.x+0, posb.y,posb.z-1, Data["players"][2].fake_name)
-
         end
 
         if distance_to_bookie < 20 and client_spawned then
@@ -394,25 +393,19 @@ Citizen.CreateThread(function ()
         if Citizen.InvokeNative(0x8DB296B814EDDA07) == 1 and Data["host"] == GetPlayerServerId() then
             if fightended then
                 TriggerServerEvent('k_bookie:setKey','winner', winner)
-                print("End of Fight: Winner is > " .. Data["players"][winner].fake_name)
-                print("client [host] > End Of Fight event start")
+                --"End of Fight: Winner is > " .. Data["players"][winner].fake_name)
                 Wait(Config.time_till_next_match)
-
-                print("client [host] > End Of Fight event wait over")
                 DelPeds(Data["players"])
-                print("client [host] > End Of Fight event delpeds")
                 Payout(winner)
-                print("client [host] > End Of Fight event payout triggered")
                 fightended = false
                 TriggerServerEvent('k_bookie:setKey','winner', false)
-                print("client [host] > End Of Fight event fightended")
             end
         end
     end
 end)
 
 function resetBets()
-    print("client [host] > ResetBets()")
+    --print("client [host] > ResetBets()")
     Data["bets"][1] = 0
     Data["bets"][2] = 0
     Data["bets"]["pot"] = 0
@@ -423,7 +416,7 @@ function resetBets()
 end
 
 function Payout(matchwinner)
-    print("client [host] > Payout()")
+    --print("client [host] > Payout()")
     local _winner = matchwinner
     TriggerServerEvent('k_bookie:fightOver', tostring(_winner))
     --Wait(4000) ? ??
@@ -521,7 +514,6 @@ AddEventHandler('clientAlert', function(msg)
     print(msg)
 end)
 
-
 -- update nui
 Citizen.CreateThread(function ()
     while true do
@@ -565,26 +557,26 @@ RegisterCommand("bookie_close", function(source, args, rawCommand)
 end, false)
 
 
--- DEV COMMANDS
+--- DEV COMMANDS
 --- bdel ( NO ARGS ) to delete all peds
-RegisterCommand("bookie_del", function(source, args, rawCommand)
-    TriggerServerEvent('k_bookie:getData')
-    Wait(500)
-    print("deleting peds")
-    DelPeds(Data["players"])
-    DelPeds(Data["bookies"])
-end, false)
+--RegisterCommand("bookie_del", function(source, args, rawCommand)
+--    TriggerServerEvent('k_bookie:getData')
+--    Wait(500)
+--    print("deleting peds")
+--    DelPeds(Data["players"])
+--    DelPeds(Data["bookies"])
+--end, false)
 
 --- bkill ( arg[1] == 1 or 2 ) to kill a player ped
-RegisterCommand("bookie_kill", function(source, args, rawCommand)
-    local pedtokill = args[1]
-    local targetped = Data["players"][tonumber(pedtokill)].ped
-    print(targetped)
-    Citizen.InvokeNative(0xAC2767ED8BDFAB15,targetped,0,0)
-end, false)
+--RegisterCommand("bookie_kill", function(source, args, rawCommand)
+--    local pedtokill = args[1]
+--    local targetped = Data["players"][tonumber(pedtokill)].ped
+--    print(targetped)
+--    Citizen.InvokeNative(0xAC2767ED8BDFAB15,targetped,0,0)
+--end, false)
 
--- bres ( NO ARGS ) to respawn peds
-RegisterCommand("bookie_respawn", function(source, args, rawCommand)
-    DelPeds(Data["players"])
-    TriggerEvent('respawnPlayers')
-end, false)
+--- bres ( NO ARGS ) to respawn peds
+--RegisterCommand("bookie_respawn", function(source, args, rawCommand)
+--    DelPeds(Data["players"])
+--    TriggerEvent('respawnPlayers')
+--end, false)
