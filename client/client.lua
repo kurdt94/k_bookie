@@ -69,13 +69,17 @@ AddEventHandler('respawnPlayers', function()
 
         Config.players[1].model = ped_1.model
         Config.players[1].fake_name = ped_1.name
+        Config.players[1].hp = ped_1.hp
         Config.players[2].model = ped_2.model
         Config.players[2].fake_name = ped_2.name
+        Config.players[2].hp = ped_2.hp
 
         Data["players"][1].model = ped_1.model
         Data["players"][1].fake_name = ped_1.name
+        Data["players"][1].hp = ped_1.hp
         Data["players"][2].model = ped_2.model
         Data["players"][2].fake_name = ped_2.name
+        Data["players"][2].hp = ped_2.hp
 
         SpawnPeds(Config.players,true)
         bettingactive = true
@@ -129,6 +133,7 @@ function SpawnPeds(peds,isPlayerPed)
         for k,v in pairs(peds) do
             local netMissionEntity = false
             local pedModel = GetHashKey(v.model)
+            local pedHP = v.hp
             while not HasModelLoaded(pedModel) do
                 Wait(500)
                 modelrequest(pedModel)
@@ -152,9 +157,9 @@ function SpawnPeds(peds,isPlayerPed)
 
             if isPlayerPed then
                 Data["players"][k].ped = new_ped
-                SetPedMaxHealth(new_ped,Data["players"][k].max_health)
-                Citizen.InvokeNative(0x166E7CF68597D8B5,new_ped, Data["players"][k].max_health) -- SET_ENTITY_MAX_HEALTH
-                Citizen.InvokeNative(0xAC2767ED8BDFAB15,new_ped, Data["players"][k].max_health,0) --_SET_ENTITY_HEALTH
+                SetPedMaxHealth(new_ped,pedHP)
+                Citizen.InvokeNative(0x166E7CF68597D8B5,new_ped, pedHP) -- SET_ENTITY_MAX_HEALTH
+                Citizen.InvokeNative(0xAC2767ED8BDFAB15,new_ped, pedHP,0) --_SET_ENTITY_HEALTH
             else
                 Data["bookies"][k].ped = new_ped
                 SetAmbientVoiceName(new_ped, v.voice)
@@ -253,12 +258,9 @@ Citizen.CreateThread(function()
             if IsControlJustReleased(0, Config.start_control) then
                     TriggerServerEvent('k_bookie:getData', Data)
                     Wait(100)
-
                     local current_amount = 0
                     current_amount = current_amount + selection_amount
-
                     TriggerServerEvent('k_bookie:setBet',current_amount)
-
                 end
 
                 if IsControlJustReleased(0, Config.bet_control_down) then
@@ -292,32 +294,30 @@ Citizen.CreateThread(function()
 
             else
                 active = false
-            end
-            if namechange then
-                if Data["players"][1].fake_name then
-
-                    Config.players[1].fake_name = Data["players"][1].fake_name
-                    Config.players[2].fake_name = Data["players"][2].fake_name
-                    Config.players[1].model = Data["players"][1].model
-                    Config.players[2].model = Data["players"][2].model
-                end
-
-                PromptDelete(FightersNameprompt)
-                FightersNamePrompt()
-                namechange = false
-            end
-            if active then
-                for k,v in pairs(Data["players"]) do
-                    local fighter = Data["players"][k]
-                    FreezeEntityPosition(fighter.ped, false)
-                    if k == 1 then TaskCombatPed(fighter.ped, Data["players"][2].ped) else
-                        TaskCombatPed(fighter.ped, Data["players"][1].ped)
-                    end
-                    TaskStandStill(fighter.ped, 0)
-                end
-                fighting = true
-            end
         end
+        if namechange then
+            if Data["players"][1].fake_name then
+                Config.players[1].fake_name = Data["players"][1].fake_name
+                Config.players[2].fake_name = Data["players"][2].fake_name
+                Config.players[1].model = Data["players"][1].model
+                Config.players[2].model = Data["players"][2].model
+            end
+            PromptDelete(FightersNameprompt)
+            FightersNamePrompt()
+            namechange = false
+        end
+        if active then
+            for k,v in pairs(Data["players"]) do
+                local fighter = Data["players"][k]
+                FreezeEntityPosition(fighter.ped, false)
+                if k == 1 then TaskCombatPed(fighter.ped, Data["players"][2].ped) else
+                    TaskCombatPed(fighter.ped, Data["players"][1].ped)
+                end
+                TaskStandStill(fighter.ped, 0)
+            end
+            fighting = true
+        end
+    end
 end)
 
 Citizen.CreateThread(function()
@@ -336,7 +336,7 @@ Citizen.CreateThread(function()
         end
 
         if distance_to_bookie < 20 and client_spawned then
-            if IsControlJustReleased(0, 0x26E9DC00) then -- Z
+            if IsControlJustReleased(0, Config.menu_control) then
                 if not menuopen then ExecuteCommand('bookie_menu') else
                     ExecuteCommand('bookie_close')
                 end
@@ -348,25 +348,26 @@ Citizen.CreateThread(function()
             DrawText3D(bookie.X, bookie.Y, bookie.Z+1, "POT : " .. Data["bets"]["pot"] .. " / " .. Config.max_pot )
         end
 
-        if Config.debugger and client_spawned then
-            DrawText(0.75,0.50, "fighting: "..tostring(fighting))
-            DrawText(0.75,0.52, "fightended: "..tostring(fightended))
-            DrawText(0.75,0.54, "bettingactive: "..tostring(bettingactive))
-
-            DrawText(0.75,0.60, "WINNER: "..tostring(winner))
-            DrawText(0.75,0.62, "PED A BETS: "..tostring(Data["bets"][1]))
-            DrawText(0.75,0.64, "PED B BETS: "..tostring(Data["bets"][2]))
-            DrawText(0.75,0.66, "TOTAL POT: "..tostring(Data["bets"]["pot"]))
+        if Config.debugger and client_spawned and distance_to_bookie < 20 then
+            DrawText3D(posa.x,posa.y,posa.z-0.2,Data["players"][1].model.. "\n" ..  Data["players"][1].ped .. "\n" .. GetEntityHealth(Data["players"][1].ped)  )
+            DrawText3D(posb.x,posb.y,posb.z-0.2,Data["players"][2].model.. "\n" ..  Data["players"][2].ped .. "\n" .. GetEntityHealth(Data["players"][2].ped)  )
         end
+
+        --if Config.debugger and client_spawned then
+        --    DrawText(0.75,0.50, "fighting: "..tostring(fighting))
+        --    DrawText(0.75,0.52, "fightended: "..tostring(fightended))
+        --    DrawText(0.75,0.54, "bettingactive: "..tostring(bettingactive))
+        --
+        --    DrawText(0.75,0.60, "WINNER: "..tostring(winner))
+        --    DrawText(0.75,0.62, "PED A BETS: "..tostring(Data["bets"][1]))
+        --    DrawText(0.75,0.64, "PED B BETS: "..tostring(Data["bets"][2]))
+        --    DrawText(0.75,0.66, "TOTAL POT: "..tostring(Data["bets"]["pot"]))
+        --end
 
         if client_spawned and fighting then
             local deada = tostring(IsEntityDead(p1))
             local deadb = tostring(IsEntityDead(p2))
 
-            if Config.debugger and distance_to_bookie < 20 then
-                DrawText3D(posa.x,posa.y,posa.z-0.2,Data["players"][1].model.. "\n" ..  Data["players"][1].ped .. "\n" .. GetEntityHealth(Data["players"][1].ped) .. "\n" .. tostring(deada) )
-                DrawText3D(posb.x,posb.y,posb.z-0.2,Data["players"][1].model.. "\n" ..  Data["players"][2].ped .. "\n" .. GetEntityHealth(Data["players"][2].ped) .. "\n" .. tostring(deadb) )
-            end
             -- IS ONE OF PEDS DEAD
             if deada ~= tostring(false) or deadb ~= tostring(false) then
                 -- PED B = winner
@@ -434,7 +435,7 @@ Citizen.CreateThread(function ()
         if not active and not fighting and not fightended then
             local fake_better = GetRandomIntInRange(0, 1000)
             Wait(100)
-            local fake_cnt = math.random(1,7)
+            local fake_cnt = math.random(1,10)
             local fake_amount = fake_cnt * 5
             local fake_winner = math.random(1,2)
             Wait(100)
@@ -559,24 +560,24 @@ end, false)
 
 --- DEV COMMANDS
 --- bdel ( NO ARGS ) to delete all peds
---RegisterCommand("bookie_del", function(source, args, rawCommand)
---    TriggerServerEvent('k_bookie:getData')
---    Wait(500)
---    print("deleting peds")
---    DelPeds(Data["players"])
---    DelPeds(Data["bookies"])
---end, false)
+RegisterCommand("bookie_del", function(source, args, rawCommand)
+    TriggerServerEvent('k_bookie:getData')
+    Wait(500)
+    print("deleting peds")
+    DelPeds(Data["players"])
+    DelPeds(Data["bookies"])
+end, false)
 
---- bkill ( arg[1] == 1 or 2 ) to kill a player ped
---RegisterCommand("bookie_kill", function(source, args, rawCommand)
---    local pedtokill = args[1]
---    local targetped = Data["players"][tonumber(pedtokill)].ped
---    print(targetped)
---    Citizen.InvokeNative(0xAC2767ED8BDFAB15,targetped,0,0)
---end, false)
+-- bkill ( arg[1] == 1 or 2 ) to kill a player ped
+RegisterCommand("bookie_kill", function(source, args, rawCommand)
+    local pedtokill = args[1]
+    local targetped = Data["players"][tonumber(pedtokill)].ped
+    print(targetped)
+    Citizen.InvokeNative(0xAC2767ED8BDFAB15,targetped,0,0)
+end, false)
 
 --- bres ( NO ARGS ) to respawn peds
---RegisterCommand("bookie_respawn", function(source, args, rawCommand)
---    DelPeds(Data["players"])
---    TriggerEvent('respawnPlayers')
---end, false)
+RegisterCommand("bookie_respawn", function(source, args, rawCommand)
+    DelPeds(Data["players"])
+    TriggerEvent('respawnPlayers')
+end, false)
