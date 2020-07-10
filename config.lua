@@ -354,7 +354,7 @@ Config.named_ped_list = {
     {name="Ralph Scott",model="U_M_M_BULLETCATCHVOLUNTEER_01"},
     {name="Paul Kelly",model="U_M_M_BwmStablehand_01"},
     {name="Calvin Martin",model="U_M_M_CAJHOMESTEAD_01"},
-    {name="Kenneth Cox",model="U_M_M_CKTManager_01"},
+    --{name="Kenneth Cox",model="U_M_M_CKTManager_01"}, would not fight against edward hill
     {name="Glen Anderson",model="U_M_M_CORNWALLDRIVER_01"},
     {name="Stanley Coleman",model="U_M_M_CrDHomesteadTenant_01"},
     {name="Edgar Starr",model="U_M_M_CRDHOMESTEADTENANT_02"},
@@ -368,7 +368,7 @@ Config.named_ped_list = {
     {name="Jay Lewis",model="U_M_M_FINALE2_AA_UPPERCLASS_01"},
     {name="Thomas Evans",model="U_M_M_GAMDoorman_01"},
     {name="Willis Ward",model="U_M_M_HHRRANCHER_01"},
-    {name="Clifton Foreman",model="U_M_M_HtlForeman_01"},
+    --{name="Clifton Foreman",model="U_M_M_HtlForeman_01"},
     {name="Roscoe Baker",model="U_M_M_HTLHUSBAND_01"},
     {name="Floyd Williams",model="U_M_M_HtlRancherBounty_01"},
     {name="Glenn Banks",model="U_M_M_ISLBUM_01"},
@@ -482,7 +482,7 @@ Config.named_ped_list = {
     {name="Samuel Rogers",model="U_M_Y_CzPHomesteadSon_03"},
     {name="Franklin Griffin",model="U_M_Y_CZPHOMESTEADSON_04"},
     {name="Victor Hayes",model="U_M_Y_CZPHOMESTEADSON_05"},
-    {name="Edward Hill",model="U_M_Y_DuelListBounty_01"},
+    {name="Edward Hill",model="U_M_Y_DuelListBounty_01"}, -- would not fight Kenneth Cox
     {name="Charlie Jenkins",model="U_M_Y_EmRSon_01"},
     {name="Harvey Flores",model="U_M_Y_HtlWorker_01"},
     {name="Phillip Lewis",model="U_M_Y_HtlWorker_02"},
