@@ -175,7 +175,7 @@ Config.named_ped_list = {
     {name="Jamar Pearson",model="MES_MARSTON2_MALES_01"},
     {name="Stefan Shields",model="MES_MARSTON5_2_MALES_01"},
     {name="Maxton Mullins",model="MES_MARSTON6_MALES_01"},
-    {name="Sawyer Davenport",model="MES_SADIE4_MALES_01"},
+    --{name="Sawyer Davenport",model="MES_SADIE4_MALES_01"}, -- DEAD
     {name="Dominic Watts",model="MES_SADIE5_MALES_01"},
     {name="Crew Leon",model="MSP_FEUD1_MALES_01"},
     {name="Zak Wilkinson",model="MSP_FUSSAR2_MALES_01"},
