@@ -559,25 +559,25 @@ end, false)
 
 
 --- DEV COMMANDS
---- bdel ( NO ARGS ) to delete all peds
-RegisterCommand("bookie_del", function(source, args, rawCommand)
-    TriggerServerEvent('k_bookie:getData')
-    Wait(500)
-    print("deleting peds")
-    DelPeds(Data["players"])
-    DelPeds(Data["bookies"])
-end, false)
+--- bookie_del ( NO ARGS ) to delete all peds
+--RegisterCommand("bookie_del", function(source, args, rawCommand)
+--    TriggerServerEvent('k_bookie:getData')
+--    Wait(500)
+--    print("deleting peds")
+--    DelPeds(Data["players"])
+--    DelPeds(Data["bookies"])
+--end, false)
 
--- bkill ( arg[1] == 1 or 2 ) to kill a player ped
-RegisterCommand("bookie_kill", function(source, args, rawCommand)
-    local pedtokill = args[1]
-    local targetped = Data["players"][tonumber(pedtokill)].ped
-    print(targetped)
-    Citizen.InvokeNative(0xAC2767ED8BDFAB15,targetped,0,0)
-end, false)
+-- bookie_kill ( arg[1] == 1 or 2 ) to kill a player ped
+--RegisterCommand("bookie_kill", function(source, args, rawCommand)
+--    local pedtokill = args[1]
+--    local targetped = Data["players"][tonumber(pedtokill)].ped
+--    print(targetped)
+--    Citizen.InvokeNative(0xAC2767ED8BDFAB15,targetped,0,0)
+--end, false)
 
---- bres ( NO ARGS ) to respawn peds
-RegisterCommand("bookie_respawn", function(source, args, rawCommand)
-    DelPeds(Data["players"])
-    TriggerEvent('respawnPlayers')
-end, false)
+--- bookie_respawn ( NO ARGS ) to respawn peds
+--RegisterCommand("bookie_respawn", function(source, args, rawCommand)
+--    DelPeds(Data["players"])
+--    TriggerEvent('respawnPlayers')
+--end, false)
