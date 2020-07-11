@@ -7,6 +7,7 @@ client_scripts {
     'config.lua',
     'client/client_func.lua',
     'client/client.lua',
+    'client/client_props.lua',
 }
 
 server_scripts {

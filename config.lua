@@ -306,7 +306,6 @@ Config.named_ped_list = {
     {hp=_strong, name="Douglas Powell",model="S_M_M_CKTWorker_01"},
     {hp=_normal, name="Floyd Campbell",model="S_M_M_COACHTAXIDRIVER_01"},
     {hp=_strong, name="Rufus Hardin",model="S_M_M_CornwallGuard_01"},
-    {hp=_strong, name="Jack Thompson",model="S_M_M_FussarHenchman_01"}, -- not working?
     {hp=_normal, name="Leroy Torres",model="S_M_M_GENCONDUCTOR_01"},
     {hp=_normal, name="Paul Patterson",model="S_M_M_HOFGuard_01"},
     {hp=_normal, name="Leo Ross",model="S_M_M_LiveryWorker_01"},
