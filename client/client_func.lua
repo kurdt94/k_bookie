@@ -42,3 +42,8 @@ function DrawText3D(x,y,z,text)
     local factor = (string.len(text)) / 150
 
 end
+
+-- DRAW_LINE {{NOT USED}}
+function DrawLine(x,y,z,_x,_y,_z,r,g,b,a)
+    Citizen.InvokeNative(`DRAW_LINE` & 0xFFFFFFFF, x, y, z, _x, _y, _z, r, g, b, a)
+end
