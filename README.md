@@ -1,5 +1,5 @@
 # k_bookie
-REDM : Bet on fights in the town of Valentine
+REDM : Bet on fights in the town of Valentine ( be aware , [untested!] )
 
 - Bet on fist-fights between 300+ different MALE models.
 - Open your History with the [Z] key 
