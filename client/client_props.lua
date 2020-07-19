@@ -126,6 +126,8 @@ Citizen.CreateThread(function ()
     end
 end)
 
--- int: { X , Y , Z }, float: range, int|str : model
+-- int: { X , Y , Z }, float: range, int: model
 local prop01 = newPropDelete({x=-236.5215,y=665.1873,z=112.3183},2.0, -1385780198)
 addPropDelete(prop01) -- -1385780198 | P_WATERTROUGHSML01X in Valentine [ worth stable ]
+
+

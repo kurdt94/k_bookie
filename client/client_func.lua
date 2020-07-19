@@ -18,7 +18,6 @@ function tablelength(T)
     return count
 end
 
-
 -- DRAW TEXT FUNCTION
 function DrawText(x,y,text)
     SetTextScale(0.35,0.35)
