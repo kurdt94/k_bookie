@@ -105,7 +105,7 @@ Citizen.CreateThread(function()
         Wait(1)
         -- do we need to spawn ?
         if client_init and not client_spawned then
-            if Data["host"] ~= false and Data["host"] == GetPlayerServerId() then
+            if Data["host"] ~= false and Data["host"] == GetPlayerServerId(GetPlayerIndex()) then
                -- print("client [host] > SpawnPeds")
                 SpawnPeds(Data["players"],true)
                 SpawnPeds(Data["bookies"],false)
