@@ -4,7 +4,10 @@ REDM : Bet on fights in the town of Valentine
 - Bet on fist-fights between 300+ different MALE models.
 - Open your History with the [Z] key 
 
-:: currently working on : various bugfixe, adjustments for use with VORP, improving resource usage
+# Currently working on:
+- various bugfixes, 
+- adjustments for usage with VORP
+- improving resource usage
 
 # screenshot
 ![20200707235417-1.jpg](https://i.postimg.cc/SxX0nxCn/20200707235417-1.jpg)
