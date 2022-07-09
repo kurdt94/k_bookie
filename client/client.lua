@@ -65,7 +65,7 @@ end)
 RegisterNetEvent('respawnPlayers')
 AddEventHandler('respawnPlayers', function()
     --print("Respawn Bookie Players")
-    if Data["host"] ~= false and Data["host"] == GetPlayerServerId() then
+    if Data["host"] ~= false and Data["host"] == GetPlayerServerId(GetPlayerIndex()) then
         local ped_1 = Config.named_ped_list[math.random(1,cnt_namedlist)]
         local ped_2 = Config.named_ped_list[math.random(1,cnt_namedlist)]
 
@@ -350,27 +350,30 @@ Citizen.CreateThread(function()
             DrawText3D(bookie.X, bookie.Y, bookie.Z+1, "POT : " .. Data["bets"]["pot"] .. " / " .. Config.max_pot )
         end
 
-        if Config.debugger and client_spawned and distance_to_bookie < 20 then
-            DrawText3D(posa.x,posa.y,posa.z-0.2,Data["players"][1].model.. "\n" ..  Data["players"][1].ped .. "\n" .. GetEntityHealth(Data["players"][1].ped)  )
-            DrawText3D(posb.x,posb.y,posb.z-0.2,Data["players"][2].model.. "\n" ..  Data["players"][2].ped .. "\n" .. GetEntityHealth(Data["players"][2].ped)  )
-        end
-
-        -- if Config.debugger and client_spawned then
-        --    DrawText(0.75,0.50, "fighting: "..tostring(fighting))
-        --    DrawText(0.75,0.52, "fightended: "..tostring(fightended))
-        --    DrawText(0.75,0.54, "bettingactive: "..tostring(bettingactive))
-        --
-        --    DrawText(0.75,0.60, "WINNER: "..tostring(winner))
-        --    DrawText(0.75,0.62, "PED A BETS: "..tostring(Data["bets"][1]))
-        --    DrawText(0.75,0.64, "PED B BETS: "..tostring(Data["bets"][2]))
-        --    DrawText(0.75,0.66, "TOTAL POT: "..tostring(Data["bets"]["pot"]))
+        --if Config.debugger and client_spawned and distance_to_bookie < 20 then
+            --DrawText3D(posa.x,posa.y,posa.z-0.2,Data["players"][1].model.. "\n" ..  Data["players"][1].ped .. "\n" .. GetEntityHealth(Data["players"][1].ped)  )
+            --DrawText3D(posb.x,posb.y,posb.z-0.2,Data["players"][2].model.. "\n" ..  Data["players"][2].ped .. "\n" .. GetEntityHealth(Data["players"][2].ped)  )
         --end
+
+        --if Config.debugger and client_spawned then
+          --  DrawText(0.75,0.50, "fighting: "..tostring(fighting))
+          --  DrawText(0.75,0.52, "fightended: "..tostring(fightended))
+          --  DrawText(0.75,0.54, "bettingactive: "..tostring(bettingactive))
+        
+          --  DrawText(0.75,0.60, "WINNER: "..tostring(winner))
+          --  DrawText(0.75,0.62, "PED A BETS: "..tostring(Data["bets"][1]))
+          --  DrawText(0.75,0.64, "PED B BETS: "..tostring(Data["bets"][2]))
+          --  DrawText(0.75,0.66, "TOTAL POT: "..tostring(Data["bets"]["pot"]))
+			
+			-- DrawText(0.75,0.70, "PED A DEAD: "..tostring(IsEntityDead(p1)))
+           -- DrawText(0.75,0.73, "PED B DEAD: "..tostring(IsEntityDead(p2)))
+        -- end
 
         if client_spawned and fighting then
             local deada = tostring(IsEntityDead(p1))
             local deadb = tostring(IsEntityDead(p2))
 
-            if Citizen.InvokeNative(0xBBCCE00B381F8482, p1) then
+			if Citizen.InvokeNative(0xBBCCE00B381F8482, p1) then
                 Citizen.InvokeNative(0xE1EF3C1216AFF2CD, p1, true, true)
                 TaskCombatPed(p1, p2)
             end
@@ -381,10 +384,10 @@ Citizen.CreateThread(function()
             end
 
             -- IS ONE OF PEDS DEAD
-            if deada ~= tostring(false) or deadb ~= tostring(false) then
+            if IsEntityDead(p1) or IsEntityDead(p2) then
                 -- PED B = winner
-                if deada ~= tostring(false) then -- PED B = winner
-                    player = PlayerPedId()
+                if IsEntityDead(p1) then -- PED B = winner
+                    --player = PlayerPedId()
                     sod = GetPedSourceOfDeath(p1)
                     fair_fight = true
                     if IsPedAPlayer(sod) then
@@ -394,7 +397,7 @@ Citizen.CreateThread(function()
 
                     Citizen.InvokeNative(0xBB9CE077274F6A1B,p2,1.0,1)
                 else -- PED A = winner
-                    player = PlayerPedId()
+                    --player = PlayerPedId()
                     fair_fight = true
                     sod = GetPedSourceOfDeath(p2)
                     if IsPedAPlayer(sod) then
@@ -492,7 +495,7 @@ end
 Citizen.CreateThread(function ()
     while true do
         Wait(1000)
-        if Citizen.InvokeNative(0x8DB296B814EDDA07) == 1 and Data["host"] == GetPlayerServerId() then
+        if Citizen.InvokeNative(0x8DB296B814EDDA07) == 1 and Data["host"] == GetPlayerServerId(GetPlayerIndex()) then
             if fightended then
                 TriggerServerEvent('k_bookie:setKey','winner', winner)
                 --"End of Fight: Winner is > " .. Data["players"][winner].fake_name)
@@ -585,7 +588,7 @@ RegisterNetEvent('clientPlaceBet')
 AddEventHandler('clientPlaceBet', function()
 
     local _playerpedid = PlayerPedId()
-    local _playerserverid = GetPlayerServerId()
+    local _playerserverid = GetPlayerServerId(GetPlayerIndex())
 
     if Data["bets"]["players"][PlayerPedId()] then
         current_amount = Data["bets"]["players"][PlayerPedId()].amount
