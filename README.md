@@ -1,9 +1,9 @@
-# k_bookie
+# k_bookie [ VORP ]
 REDM : Bet on fights in the town of Valentine
 - Bet on fist-fights between 300+ different MALE models.
 - Open your History with the [Z] key 
 
-# working on VORP ( https://github.com/VORPCORE ) 
+# for use on VORP ( https://github.com/VORPCORE ) 
 - REDEM no longer supported
 
 # screenshot
