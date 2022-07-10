@@ -1,3 +1,11 @@
+-- VORP 
+local VorpCore = {}
+VorpInv = exports.vorp_inventory:vorp_inventoryApi()
+
+TriggerEvent("getCore",function(core)
+    VorpCore = core
+end)
+
 local server_data = {
     [1] = nil,
     [2] = nil,
@@ -40,11 +48,10 @@ end)
 RegisterNetEvent('k_bookie:setBet')
 AddEventHandler('k_bookie:setBet', function(bet)
     _source = source
-    local user_cash = 0
-    TriggerEvent("redemrp:getPlayerFromId",_source,function(user)
-        user_cash = user.getMoney()
-    end)
-    if user_cash > bet then
+    local Character = VorpCore.getUser(_source).getUsedCharacter
+    local currentMoney = Character.money
+	
+    if currentMoney >= bet then
         TriggerClientEvent('clientPlaceBet',_source)
     else
         TriggerClientEvent('clientAlert',source,'not enough money')
@@ -118,17 +125,15 @@ end)
 RegisterNetEvent("k_bookie:addCash")
 AddEventHandler("k_bookie:addCash",function(money)
     -- Add Money and or XP
+    local Character = VorpCore.getUser(_source).getUsedCharacter
     local _money = tonumber(money)
-    TriggerEvent("redemrp:getPlayerFromId",source,function(user)
-        user.addMoney(tonumber(_money))
-    end)
+    Character.addCurrency(0,_money)
 end)
 
 RegisterNetEvent("k_bookie:removeCash")
 AddEventHandler("k_bookie:removeCash",function(money)
     -- Add Money and or XP
+    local Character = VorpCore.getUser(_source).getUsedCharacter
     local _money = tonumber(money)
-    TriggerEvent("redemrp:getPlayerFromId",source,function(user)
-        user.removeMoney(tonumber(_money))
-    end)
+    Character.removeCurrency(0,_money)
 end)
