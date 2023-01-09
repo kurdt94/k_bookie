@@ -28,4 +28,5 @@ REDM : Bet on fights in the town of Valentine
 - note : It is safe to remove lines from the model list
 
 # Notes
-- Mostly untested ( if you find any bugs , let me know )
+- Mostly untested
+- Needs adjustments regarding HOSTS and multiplayer support
